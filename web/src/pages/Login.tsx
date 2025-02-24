@@ -1,0 +1,83 @@
+import axios from "axios";
+
+import { useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+
+function Login() {
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
+  const navigate = useNavigate();
+
+  // const handleCreate = async (e: any) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await axios.post("http://localhost:3000/create", {
+  //       login: "admin",
+  //       password: "admin",
+  //     });
+  //     console.log(response);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  const handleLogin = async (e: any) => {
+    e.preventDefault();
+    console.log("as");
+
+    let loginData = {
+      email,
+      pass,
+    };
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/login",
+        loginData
+      );
+
+      await localStorage.setItem("token", response.data.token);
+      await navigate("/dashboard");
+    } catch (error) {}
+  };
+
+  return (
+    <main className="w-full h-screen bg-custom-dark font-display flex items-center justify-center">
+      <form className="text-white w-max flex flex-col gap-11">
+        <div className="flex flex-col ">
+          <span className="text-custom-gray">Mente de Anne Matos</span>
+          <h1 className="text-4xl font-extrabold">Acesse sua conta, Anne</h1>
+        </div>
+        <div className="flex flex-col gap-3 w-full items-center">
+          <div className="flex flex-col">
+            <span className="text-custom-gray">E-mail</span>
+            <input
+              onChange={(e) => setEmail(e.target.value)}
+              className="p-3 w-[300px] rounded-[5px] border-[0.1px] border-custom-gray bg-custom-black outline-none focus:border-[1px] focus:border-custom-purple "
+              type="text"
+              required
+            />
+          </div>
+
+          <div className="flex flex-col ">
+            <span className="text-custom-gray">Senha</span>
+            <input
+              onChange={(e) => setPass(e.target.value)}
+              className="p-3 w-[300px] rounded-[5px] border-[0.1px] border-custom-gray bg-custom-black outline-none focus:border-custom-purple"
+              type="text"
+              required
+            />
+          </div>
+          <button
+            onClick={handleLogin}
+            className="p-3 w-[300px] rounded-[5px] h-[50px] bg-custom-purple text-white text-center font-bold "
+          >
+            Entrar
+          </button>
+        </div>
+      </form>
+    </main>
+  );
+}
+
+export default Login;
