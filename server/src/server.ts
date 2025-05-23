@@ -4,6 +4,14 @@ import jwt from "@fastify/jwt";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
+// Extend FastifyInstance to include the 'auth' property
+declare module "fastify" {
+  interface FastifyInstance {
+    auth: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
+  }
+}
+
+
 const fastify = Fastify({ logger: true });
 
 // Configurar CORS para permitir requisições do frontend
@@ -29,51 +37,63 @@ fastify.decorate("auth", async (request, reply) => {
   }
 });
 
-fastify.post("/create-document", async (request, reply) => {
-    const { photoDocument, title, DocumentDescription, DocumentInsight } = request.body as {
-      title: string;
-      photoDocument: string;
-      DocumentDescription: string;
-      DocumentInsight: string;
-    };
-    console.log(title, photoDocument, DocumentDescription, DocumentInsight);
-    
-    if (!title || !DocumentDescription || !DocumentInsight) {
-      return reply.status(400).send({ error: "Todos os campos são obrigatórios!" });
+fastify.post("/create-book", async (request, reply) => {
+  const { type, formData, resumo, palavrasChave, referencias, capitulos } = request.body as {
+    type: string;
+    formData: any;
+    resumo: string;
+    palavrasChave: [];
+    referencias: [];
+    capitulos: [];
+  };
+
+  try {
+    // Garante que o campo 'year' do formData seja convertido em Date
+    if (formData.year && typeof formData.year === "string") {
+      formData.year = new Date(formData.year);
     }
-  
-    try {
-      const Document = await prisma.document.create({
-        data: { photoDocument, title, DocumentDescription, DocumentInsight },
-      });
-      console.log("DEI CET")
-      return reply.status(201).send(Document);
-    } catch (error) {
-      console.error("Erro ao criar o livro:", error);
-      return reply.status(500).send({ error: "Erro interno ao criar o livro.", details: error.message });
-    }
-  });
-  
 
-  fastify.post("/create", async (request, reply) => {
-    console.log("Attempting to create user...");
+    const Document = await prisma.document.create({
+      data: {
+        type,
+        formData,
+        resumo,
+        palavrasChave,
+        referencias,
+        capitulos,
+      },
+    });
 
-    try {
-        const user = await prisma.user.create({
-            data: {
-                login: "admin",
-                password: "admin"
-            }
-        });
-
-        console.log("User created:", user);
-        return reply.status(201).send(user);
-
-    } catch (error) {
-        console.error("Error creating user:", error);
-        return reply.status(500).send({ error: "Error creating user." });
-    }
+    return reply.status(201).send(Document);
+  } catch (error: any) {
+    console.error("Erro ao criar o livro:", error);
+    return reply.status(500).send({
+      error: "Erro interno ao criar o livro.",
+      details: error.message,
+    });
+  }
 });
+
+
+//   fastify.post("/create", async (request, reply) => {
+//     console.log("Attempting to create user...");
+
+//     try {
+//         const user = await prisma.user.create({
+//             data: {
+//                 login: "admin",
+//                 password: "admin"
+//             }
+//         });
+
+//         console.log("User created:", user);
+//         return reply.status(201).send(user);
+
+//     } catch (error) {
+//         console.error("Error creating user:", error);
+//         return reply.status(500).send({ error: "Error creating user." });
+//     }
+// });
 fastify.post("/login", async (request, reply) => {
   const { email, pass } = request.body as { email: string; pass: string };
 

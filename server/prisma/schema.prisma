@@ -20,9 +20,28 @@ model User {
 }
 
 model Document {
-    id String @id @default(uuid())
-    photoDocument String
-    title String
-    DocumentDescription String
-    DocumentInsight String
+    id            String  @id @default(uuid())
+    type String
+    formData      Json
+    resumo        String?
+    palavrasChave Json
+    referencias   Json?
+    capitulos     Json?  // Permite valores nulos
 }
+
+
+// model Article {
+//     id            String  @id @default(uuid())
+//     formData      Json
+//     resumo        String
+//     resumoPages   Int
+//     palavrasChave Json
+//     referencias   Json
+// }
+
+// model Course {
+//     id            String  @id @default(uuid())
+//     formData      Json
+//     palavrasChave Json
+//     referencias   Json
+// }

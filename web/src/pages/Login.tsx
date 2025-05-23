@@ -43,7 +43,7 @@ function Login() {
 
   return (
     <main className="w-full h-screen bg-custom-dark font-display flex items-center justify-center">
-      <form className="text-white w-max flex flex-col gap-11">
+      <form className="text-text-dark w-max flex flex-col gap-11">
         <div className="flex flex-col ">
           <span className="text-custom-gray">Mente de Anne Matos</span>
           <h1 className="text-4xl font-extrabold">Acesse sua conta, Anne</h1>
