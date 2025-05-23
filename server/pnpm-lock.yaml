@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
   '@fastify/cors':
     specifier: ^10.0.2
@@ -9,7 +13,7 @@ dependencies:
     version: 9.0.4
   '@prisma/client':
     specifier: 6.4.0
-    version: 6.4.0(prisma@6.4.0)
+    version: 6.4.0(prisma@6.4.0)(typescript@5.8.3)
   fastify:
     specifier: ^5.2.1
     version: 5.2.1
@@ -32,7 +36,10 @@ devDependencies:
     version: 9.6.7
   prisma:
     specifier: ^6.4.0
-    version: 6.4.0
+    version: 6.4.0(typescript@5.8.3)
+  typescript:
+    specifier: ^5.8.3
+    version: 5.8.3
 
 packages:
 
@@ -796,7 +803,7 @@ packages:
     engines: {node: '>=8'}
     dev: false
 
-  /@prisma/client@6.4.0(prisma@6.4.0):
+  /@prisma/client@6.4.0(prisma@6.4.0)(typescript@5.8.3):
     resolution: {integrity: sha512-48tLb+VL7iuuqJXjD4Xbqa622fuh8UtqmjTf39AKrQjlTUdNaMc9sC/c49eXQkcnrAdh9FoS1qVupmZSYiZ9TQ==}
     engines: {node: '>=18.18'}
     requiresBuild: true
@@ -809,7 +816,8 @@ packages:
       typescript:
         optional: true
     dependencies:
-      prisma: 6.4.0
+      prisma: 6.4.0(typescript@5.8.3)
+      typescript: 5.8.3
     dev: false
 
   /@prisma/debug@6.4.0:
@@ -1392,7 +1400,7 @@ packages:
       thread-stream: 3.1.0
     dev: false
 
-  /prisma@6.4.0:
+  /prisma@6.4.0(typescript@5.8.3):
     resolution: {integrity: sha512-UxEaEo1ajnEvwT9UQRyRfq0zZ9pvOmlZ6kShY8Hgu4jxgkHo1mg85IEP8yBgFRiRBA2o2OIt1nxzcllt86D4Mw==}
     engines: {node: '>=18.18'}
     hasBin: true
@@ -1406,6 +1414,7 @@ packages:
       '@prisma/engines': 6.4.0
       esbuild: 0.18.20
       esbuild-register: 3.6.0(esbuild@0.18.20)
+      typescript: 5.8.3
     optionalDependencies:
       fsevents: 2.3.3
     transitivePeerDependencies:
@@ -1578,6 +1587,11 @@ packages:
     optionalDependencies:
       fsevents: 2.3.3
     dev: false
+
+  /typescript@5.8.3:
+    resolution: {integrity: sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==}
+    engines: {node: '>=14.17'}
+    hasBin: true
 
   /undici-types@6.20.0:
     resolution: {integrity: sha512-Ny6QZ2Nju20vw1SRHe3d9jVu6gJ+4e3+MMpqu7pqE5HT6WsTSlce++GQmK5UXS8mzV8DSYHrQH+Xrf2jVcuKNg==}
