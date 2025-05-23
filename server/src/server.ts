@@ -127,5 +127,8 @@ const start = async () => {
     process.exit(1);
   }
 };
+fastify.get('/', async (request, reply) => {
+  return reply.send({ message: "Servidor ativo e rodando!" });
+});
 
 start();
