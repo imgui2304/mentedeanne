@@ -49,7 +49,7 @@ interface DataLegislationProps {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
           <div className="bg-white p-4 rounded-xl shadow-md">
             <h2 className="font-semibold">Classificação</h2>
-            <p>{formData.classification}</p>
+            <p>{formData.classification.length === 0 ? "Sem classificação" : formData.classification}</p>
           </div>
   
           <div className="bg-white p-4 rounded-xl shadow-md">

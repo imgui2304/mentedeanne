@@ -1,5 +1,4 @@
-import React from 'react';
-import { generateBookPDF } from '../../../functions/generatePDF';  // Importe a função de geração de PDF
+import { generateBookPDF } from "../../../functions/generatePDF"; // Importe a função de geração de PDF
 
 interface Chapter {
   id: number;
@@ -43,16 +42,16 @@ export const InterfaceBook = ({
     const pdfBytes = await generateBookPDF(bookData);
 
     // Criar um link para download do PDF
-    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-    const link = document.createElement('a');
+    const blob = new Blob([pdfBytes], { type: "application/pdf" });
+    const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = `${formData.title}.pdf`;
     link.click();
   };
 
   return (
-<main className="flex flex-col items-center justify-start w-full min-h-screen p-6 pt-16 overflow-y-auto">
-<h1 className="text-3xl font-bold">{formData.title}</h1>
+    <main className="flex flex-col items-center justify-start w-full min-h-screen p-6 pt-16 overflow-y-auto">
+      <h1 className="text-3xl font-bold">{formData.title}</h1>
 
       {/* Exibição das informações do livro */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-6 gap-6 w-full max-w-6xl">
@@ -64,7 +63,6 @@ export const InterfaceBook = ({
           <h2 className="font-semibold">Tipo de Documento</h2>
           <p>{type}</p>
         </div>
-
 
         <div className="bg-white p-4 rounded-xl shadow-md">
           <h2 className="font-semibold">Editora</h2>
@@ -78,7 +76,10 @@ export const InterfaceBook = ({
 
         <div className="bg-white p-4 rounded-xl shadow-md col-span-1 md:col-span-2 lg:col-span-3">
           <h2 className="font-semibold">Link do Livro</h2>
-          <a href={formData.linkBook} className="text-blue-600 underline break-all">
+          <a
+            href={formData.linkBook}
+            className="text-blue-600 underline break-all"
+          >
             {formData.linkBook}
           </a>
         </div>

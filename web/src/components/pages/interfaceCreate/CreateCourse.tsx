@@ -34,7 +34,7 @@ export const CreateCourse = () => {
     };
     console.log(payload)
     const response = await axios.post(
-      "http://localhost:3000/create-book",
+      "https://mentedeanne-production.up.railway.app/create-book",
       payload
     );
 
@@ -69,11 +69,13 @@ export const CreateCourse = () => {
                 name="title"
                 placeholder="Título"
                 className="p-3 rounded-[5px] bg-custom-black text-text-dark"
+                required
               />
               <Field
                 name="institution"
                 placeholder="Instituição"
                 className="p-3 rounded-[5px] bg-custom-black text-text-dark"
+                required
               />
               <Field
                 name="year"

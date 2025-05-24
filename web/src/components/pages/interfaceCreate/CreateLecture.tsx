@@ -34,7 +34,7 @@ export const CreateLecture = () => {
     };
 
     const response = await axios.post(
-        "http://localhost:3000/create-book",
+        "https://mentedeanne-production.up.railway.app/create-book",
         payload
     );
     console.log(payload)
@@ -72,21 +72,29 @@ export const CreateLecture = () => {
                 name="title"
                 placeholder="Título"
                 className="p-3 rounded-[5px] bg-custom-black text-text-dark"
+              required
+
               />
               <Field
                 name="speaker"
                 placeholder="Palestrante"
                 className="p-3 rounded-[5px] bg-custom-black text-text-dark"
+              required
+
               />
               <Field
                 name="event"
                 placeholder="Evento"
                 className="p-3 rounded-[5px] bg-custom-black text-text-dark"
+              required
+
               />
               <Field
                 name="institution"
                 placeholder="Instituição"
                 className="p-3 rounded-[5px] bg-custom-black text-text-dark"
+              required
+
               />
               <Field
                 name="date"

@@ -37,7 +37,7 @@ const createDocument = async (values: any) => {
   };
   
   try {
-    const response = await axios.post("http://localhost:3000/create-book", payload);
+    const response = await axios.post("https://mentedeanne-production.up.railway.app/create-book", payload);
     if (response.status === 201) {
       setDocumentCreated(true);
       setTimeout(() => {
@@ -71,16 +71,17 @@ const createDocument = async (values: any) => {
           <Form className="flex-col gap-4 flex text-text-dark">
             <h2 className="text-text-dark text-xl font-bold mb-4">Informações do Artigo</h2>
             <div className="grid grid-cols-2 gap-4 w-full h-full">
-              <Field as="select" name="category" className="p-3 rounded bg-custom-black text-text-dark">
+              <Field as="select" name="category" className="p-3 rounded bg-custom-black text-text-dark" required>
                 <option value="">Selecione a Categoria</option>
                 <option value="TCC">TCC</option>
                 <option value="Monografia">Monografia</option>
                 <option value="Dissertacao">Dissertação</option>
+
                 <option value="Tese">Tese</option>
               </Field>
-              <Field name="title" placeholder="Título" className="p-3 rounded bg-custom-black text-text-dark" />
-              <Field name="author" placeholder="Autor(a)" className="p-3 rounded bg-custom-black text-text-dark" />
-              <Field name="placePublication" placeholder="Local de Publicação" className="p-3 rounded bg-custom-black text-text-dark" />
+              <Field name="title" placeholder="Título" className="p-3 rounded bg-custom-black text-text-dark" required  />
+              <Field name="author" placeholder="Autor(a)" className="p-3 rounded bg-custom-black text-text-dark" required />
+              <Field name="placePublication" placeholder="Local de Publicação" className="p-3 rounded bg-custom-black text-text-dark" required />
               <Field name="year" placeholder="Ano" className="p-3 rounded bg-custom-black text-text-dark" />
               <Field name="linkAccess" placeholder="ORCID" className="p-3 rounded bg-custom-black text-text-dark" />
               <Field name="pageCount" placeholder="Quantidade de Páginas" className="p-3 rounded bg-custom-black text-text-dark" />

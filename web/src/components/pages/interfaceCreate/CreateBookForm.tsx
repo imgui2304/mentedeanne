@@ -37,7 +37,7 @@ export const CreateBookForm = () => {
         capitulos,
       };
         console.log(payload)    
-      const response = await axios.post("http://localhost:3000/create-book", payload);
+      const response = await axios.post("https://mentedeanne-production.up.railway.app/create-book", payload);
       if (response.status === 201) {
         setDocumentCreated(true);
         setTimeout(() => setDocumentCreated(false), 3000);
@@ -75,7 +75,7 @@ export const CreateBookForm = () => {
       <form onSubmit={formik.handleSubmit} className="flex-col gap-4 flex text-text-dark">
         <h2 className="text-text-dark text-xl font-bold mb-4">Informações do Documento</h2>
         <div className="grid grid-cols-2 gap-4 w-full h-full">
-          <InputField type="text" placeholder="Título" {...formik.getFieldProps("title")} />
+          <InputField type="text" placeholder="Título" {...formik.getFieldProps("title")}  />
           <InputField type="text" placeholder="Autor (separe por vírgula)" {...formik.getFieldProps("author")} />
           <InputField type="text" placeholder="Local de Publicação" {...formik.getFieldProps("placePublication")} />
           <InputField type="text" placeholder="Editora" {...formik.getFieldProps("publisher")} />

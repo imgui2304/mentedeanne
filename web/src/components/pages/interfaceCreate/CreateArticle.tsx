@@ -46,7 +46,7 @@ export const CreateArticle = () => {
     console.log(payload);
   
     const response = await axios.post(
-      "http://localhost:3000/create-book",
+      "https://mentedeanne-production.up.railway.app/create-book",
       payload
     );
   
@@ -88,6 +88,7 @@ export const CreateArticle = () => {
                 name="title"
                 placeholder="Título"
                 className="p-3 rounded-[5px] bg-custom-black text-text-dark"
+                required
               />
               <Field
                 name="author"
@@ -101,6 +102,7 @@ export const CreateArticle = () => {
                     .map((author) => author.trim());
                   setFieldValue("author", authors); // Atualiza o estado de 'author' como um array
                 }}
+                required
               />
               <Field
                 name="placePublication"
@@ -117,6 +119,7 @@ export const CreateArticle = () => {
                 name="ISSN"
                 placeholder="ISSN"
                 className="p-3 rounded-[5px] bg-custom-black text-text-dark"
+                required
               />
               <Field
                 name="linkAccess"
@@ -138,6 +141,7 @@ export const CreateArticle = () => {
                 placeholder={`Digite o resumo aqui...`}
                 rows={10}
                 className="w-full mt-2 p-2 border border-custom-gray rounded"
+                required
               ></textarea>
             </section>
 

@@ -24,7 +24,7 @@ export const CreateLegislation = () => {
     };
     console.log(payload);
     const response = await axios.post(
-      "http://localhost:3000/create-book",
+      "https://mentedeanne-production.up.railway.app/create-book",
       payload
     );
 
@@ -45,7 +45,7 @@ export const CreateLegislation = () => {
       <Formik
         initialValues={{
           title: "",
-          classification: "",
+          classification: "" ,
           specification: "",
           purpose: "",
           organ: "",
@@ -69,6 +69,7 @@ export const CreateLegislation = () => {
                   as="select"
                   name="classification"
                   className="p-3 rounded-[5px] bg-custom-black text-text-dark w-full"
+                  required
                 >
                   <option value="">Selecione a categoria</option>
                   <option value="Decreto">Decreto</option>
@@ -84,6 +85,8 @@ export const CreateLegislation = () => {
                 name="title"
                 placeholder="Digite o Título"
                 className="p-2 rounded-[5px] bg-custom-black text-text-dark"
+                required
+
               />
               {/* Especificação */}
 
@@ -91,18 +94,24 @@ export const CreateLegislation = () => {
                 name="specification"
                 placeholder="Especificação da Numeração e Data da Aprovação"
                 className="p-3 rounded-[5px] bg-custom-black text-text-dark"
+              required
+
               />
               {/* Finalidade */}
               <Field
                 name="purpose"
                 placeholder="Finalidade"
                 className="p-3 rounded-[5px] bg-custom-black text-text-dark"
+              required
+
               />
               {/* Orgão */}
               <Field
                 name="organ"
                 placeholder="Órgão"
                 className="p-3 rounded-[5px] bg-custom-black text-text-dark"
+              required
+
               />
               {/* Ano */}
               <Field
@@ -125,6 +134,7 @@ export const CreateLegislation = () => {
               value={resumo}
               className="p-3 rounded-[5px] bg-custom-black text-text-dark"
               onChange={(e) => setResumo(e.target.value)}
+              required
             />
 
             {/* Seção Palavras-Chave */}
@@ -137,6 +147,7 @@ export const CreateLegislation = () => {
                   onChange={(e) => setNewPalavraChave(e.target.value)}
                   placeholder="Digite uma palavra-chave"
                   className="p-2 border border-custom-gray rounded"
+
                 />
                 <button
                   type="button"

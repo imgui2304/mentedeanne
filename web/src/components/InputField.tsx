@@ -16,6 +16,7 @@ interface InputFieldProps {
     
         onChange={onChange}
         className="p-3 rounded-[5px] bg-custom-black text-text-dark"
+        required
       />
     );
   };

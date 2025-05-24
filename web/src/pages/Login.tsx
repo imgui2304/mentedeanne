@@ -11,7 +11,7 @@ function Login() {
   // const handleCreate = async (e: any) => {
   //   e.preventDefault();
   //   try {
-  //     const response = await axios.post("http://localhost:3000/create", {
+  //     const response = await axios.post("http://mentedeanne-production.up.railway.app/create", {
   //       login: "admin",
   //       password: "admin",
   //     });
@@ -32,7 +32,7 @@ function Login() {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/login",
+        "https://mentedeanne-production.up.railway.app/login",
         loginData
       );
 

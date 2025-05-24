@@ -128,6 +128,7 @@ export const Dashboard = () => {
   const [searchDocument, setSearchDocument] = useState<string>("");
   const [indexDocument, setIndexDocument] = useState<number>(0);
   const [typeDocument, setTypeDocument] = useState<string>();
+  const [selectedCreateType, setSelectedCreateType] = useState<string>("");
 
   const [filteredDocuments, setFilteredDocuments] = useState<Document[]>([]);
 
@@ -142,7 +143,7 @@ export const Dashboard = () => {
 
   // Busca os documentos apenas uma vez ao montar
   useEffect(() => {
-    axios.get("http://localhost:3000/documents").then((response) => {
+    axios.get("https://mentedeanne-production.up.railway.app/documents").then((response) => {
       setDocuments(response.data);
       setFilteredDocuments(response.data); // já popula os filtrados
     });
@@ -181,10 +182,12 @@ export const Dashboard = () => {
   };
 
   const handleTypeSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedType(event.target.value);
+    // setSelectedType(event.target.value);
+    setSelectedCreateType(event.target.value);
+
     setShowCreateForm(true);
     setShowInterface(false);
-    setSelectedDocument(null);
+    // setSelectedDocument(null);
   };
 
   // RENDERIZAÇÃO
@@ -239,7 +242,7 @@ export const Dashboard = () => {
 
         <select
           onChange={handleTypeSelect}
-          value={selectedType}
+          value={selectedCreateType}
           className="p-3 rounded-[5px] h-[50px] bg-custom-purple text-white text-center font-bold text-[14px]"
         >
           <option value="" disabled>
@@ -255,14 +258,13 @@ export const Dashboard = () => {
 
 
       <main className="w-full h-screen bg-custom-dark flex ml-[300px]">
-        {showCreateForm && selectedType === "book" && <CreateBookForm />}
-        {showCreateForm && selectedType === "article" && <CreateArticle />}
-        {showCreateForm && selectedType === "document" && <CreateDocuments />}
-        {showCreateForm && selectedType === "lecture" && <CreateLecture />}
-        {showCreateForm && selectedType === "course" && <CreateCourse />}
-        {showCreateForm && selectedType === "legislation" && (
-          <CreateLegislation />
-        )}
+      {showCreateForm && selectedCreateType === "livro" && <CreateBookForm />}
+{showCreateForm && selectedCreateType === "artigo" && <CreateArticle />}
+{showCreateForm && selectedCreateType === "document" && <CreateDocuments />}
+{showCreateForm && selectedCreateType === "palestra" && <CreateLecture />}
+{showCreateForm && selectedCreateType === "curso" && <CreateCourse />}
+{showCreateForm && selectedCreateType === "legislação" && <CreateLegislation />}
+
 
         {showInterface && typeDocument === "palestra" && (
           <InterfaceLecture
