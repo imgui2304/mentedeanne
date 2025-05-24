@@ -3,7 +3,7 @@ import { PDFDocument, rgb } from 'pdf-lib';
 export async function generateBookPDF(bookData: any) {
   const pdfDoc = await PDFDocument.create();
   const page = pdfDoc.addPage([600, 800]);
-  const { width, height } = page.getSize();
+  const { height } = page.getSize();
   let yPosition = height - 50;
 
   const drawText = (text: string) => {

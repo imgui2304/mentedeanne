@@ -122,7 +122,6 @@ export const Dashboard = () => {
   const [showInterface, setShowInterface] = useState(false);
 
   const [documents, setDocuments] = useState<Document[]>([]);
-  const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
 
   const [selectedType, setSelectedType] = useState<string>("");
   const [searchDocument, setSearchDocument] = useState<string>("");
