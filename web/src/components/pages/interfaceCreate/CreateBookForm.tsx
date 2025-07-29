@@ -2,9 +2,10 @@ import { useState } from "react";
 import { useFormik } from "formik";
 import axios from "axios";
 import InputField from "../../InputField";
+import Sucess from "../../SucessMsg";
 
 export const CreateBookForm = () => {
-  const [documentCreated, setDocumentCreated] = useState(false);
+  const [documentCreated, setDocumentCreated] = useState<number>(0);
   const [resume, setResume] = useState("");
   const [palavrasChave, setPalavrasChave] = useState<string[]>([]);
   const [referencias, setReferencias] = useState<string[]>([]);
@@ -37,11 +38,19 @@ export const CreateBookForm = () => {
         capitulos,
       };
         console.log(payload)    
-      const response = await axios.post("https://mentedeanne-production.up.railway.app/create-book", payload);
-      if (response.status === 201) {
-        setDocumentCreated(true);
-        setTimeout(() => setDocumentCreated(false), 3000);
-      }
+        try {
+          await axios.post(
+            "https://mentedeanne-production.up.railway.app/create-book",
+            payload
+          );
+         
+            setDocumentCreated(1);
+            setTimeout(() => setDocumentCreated(0), 3000);
+          
+        } catch (error) {
+          setDocumentCreated(2);
+          setTimeout(() => setDocumentCreated(0), 3000);
+        }
     },
   });
 
@@ -142,11 +151,7 @@ export const CreateBookForm = () => {
           <button type="submit" className="p-3 rounded w-[200px] h-[50px] bg-custom-purple text-white font-bold">Adicionar Documento</button>
         </div>
 
-        {documentCreated && (
-          <div className="bg-custom-purple text-white bottom-4 right-4 absolute rounded transition-all duration-500 opacity-100">
-            <h1 className="p-3">Documento criado com sucesso! Recarregue a página.</h1>
-          </div>
-        )}
+        <Sucess sucess={documentCreated} />
       </form>
     </div>
   );

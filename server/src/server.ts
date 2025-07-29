@@ -106,6 +106,30 @@ fastify.post("/login", async (request, reply) => {
     return reply.status(401).send({ error: "E-mail ou senha inválidos!" });
   }
 });
+fastify.delete("/document-delete/:id", async (request, reply) => {
+  const { id } = request.params as { id: string };
+  console.log("Tentando deletar documento com ID:", id);
+
+  try {
+    const deletedDocument = await prisma.document.delete({
+      where: { id },
+    });
+
+    return reply.status(200).send({
+      message: "Documento deletado com sucesso!",
+      document: deletedDocument,
+    });
+  } catch (error: any) {
+    console.error("Erro ao deletar documento:", error);
+
+    if (error.code === 'P2025') {
+      return reply.status(404).send({ error: "Documento não encontrado." });
+    }
+
+    return reply.status(500).send({ error: "Erro interno ao deletar o documento." });
+  }
+});
+
 fastify.get("/documents", async (request, reply) => {
   const documents = await prisma.document.findMany();
   return reply.send(documents);

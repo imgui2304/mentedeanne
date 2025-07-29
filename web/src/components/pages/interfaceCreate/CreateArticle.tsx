@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { Formik, Field, Form } from "formik";
 import axios from "axios";
+import Sucess from "../../SucessMsg";
 // import jsPDF from "jspdf";
 // import InputField from "./InputField";
 
 // Função para gerar o PDF com as informações do formulário
 
 export const CreateArticle = () => {
-  const [documentCreated, setDocumentCreated] = useState(false);
+  const [documentCreated, setDocumentCreated] = useState<number>(0);
   const [resumo, setResumo] = useState("");
   const [palavrasChave, setPalavrasChave] = useState<string[]>([]);
   const [referencias, setReferencias] = useState<string[]>([]);
@@ -45,16 +46,18 @@ export const CreateArticle = () => {
   
     console.log(payload);
   
-    const response = await axios.post(
-      "https://mentedeanne-production.up.railway.app/create-book",
-      payload
-    );
-  
-    if (response.status === 201) {
-      setDocumentCreated(true);
-      setTimeout(() => {
-        setDocumentCreated(false);
-      }, 3000);
+    try {
+      await axios.post(
+        "https://mentedeanne-production.up.railway.app/create-book",
+        payload
+      );
+     
+        setDocumentCreated(1);
+        setTimeout(() => setDocumentCreated(0), 3000);
+      
+    } catch (error) {
+      setDocumentCreated(2);
+      setTimeout(() => setDocumentCreated(0), 3000);
     }
   };
   
@@ -209,11 +212,7 @@ export const CreateArticle = () => {
               </button>
             </div>
 
-            {documentCreated && (
-              <div className="mt-4 p-3 bg-green-500 text-white rounded">
-                Documento criado com sucesso!
-              </div>
-            )}
+            <Sucess sucess={documentCreated} />
           </Form>
         )}
       </Formik>

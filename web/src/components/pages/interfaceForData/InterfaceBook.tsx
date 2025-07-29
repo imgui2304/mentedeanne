@@ -1,3 +1,4 @@
+import { documentDelete } from "../../../functions/documentDelete";
 import { generateBookPDF } from "../../../functions/generatePDF"; // Importe a função de geração de PDF
 
 interface Chapter {
@@ -16,6 +17,7 @@ interface BookProps {
   palavrasChave: string[];
   referencias: string[];
   resumo: string;
+  id:string;
   capitulos: Chapter[];
   type: string;
 }
@@ -25,6 +27,7 @@ export const InterfaceBook = ({
   palavrasChave,
   referencias,
   resumo,
+  id,
   capitulos,
   type,
 }: BookProps) => {
@@ -86,12 +89,20 @@ export const InterfaceBook = ({
       </div>
 
       {/* Botão para gerar o PDF */}
-      <button
-        onClick={handleDownloadPDF}
-        className="mt-6 px-6 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600"
-      >
-        Baixar PDF
-      </button>
+     <div className="flex gap-2">
+                   <button
+                     onClick={handleDownloadPDF}
+                     className="mt-6 px-6 py-3 border-[1px] border-black text-black rounded-lg hover:text-white hover:bg-black hover:cursor-pointer transition-colors"
+                   >
+                     Baixar PDF
+                   </button>
+                   <button
+                     onClick={() => documentDelete(id)}
+                     className="mt-6 px-6 text-white bg-red-500 rounded-lg shadow-mg py-3 hover:cursor-pointer hover:border-[1px] hover:border-black hover:bg-transparent border transition-colors hover:text-black"
+                   >
+                     Apagar Documento{" "}
+                   </button>
+                 </div>
 
       <div className="w-full max-w-6xl mt-8">
         <h2 className="font-semibold text-xl mb-2">Resumo</h2>

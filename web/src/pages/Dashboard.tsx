@@ -23,6 +23,7 @@ interface BaseDocument {
 
 interface BookDocument extends BaseDocument {
   type: "livro";
+  id:string;
   formData: {
     title: string;
     author: string;
@@ -218,7 +219,7 @@ export const Dashboard = () => {
         </div>
 
         <span className="text-custom-gray text-[14px]">Livros guardados</span>
-        <div className="h-full flex flex-col gap-3 overflow-scroll">
+        <div className="h-full flex flex-col gap-3 overflow-scroll border-none">
           <div className="overflow-scroll flex flex-col gap-2 p-1">
             {filteredDocuments.map((document) => {
               // Pega o índice real no array original documents
@@ -229,7 +230,7 @@ export const Dashboard = () => {
               return (
                 <button
                   key={document.id}
-                  className="bg-zinc-100 text-left rounded p-2"
+                  className="bg-zinc-100 text-left rounded p-2 hover:bg-black hover:text-white transition-colors hover:cursor-pointer"
                   onClick={() => selectDocument(originalIndex)}
                 >
                   {document.formData.title || "Título indisponível"}
@@ -291,6 +292,7 @@ export const Dashboard = () => {
             palavrasChave={documents[indexDocument].palavrasChave || []}
             referencias={documents[indexDocument].referencias || []}
             resumo={documents[indexDocument].resumo || ""}
+            id={documents[indexDocument].id || ""}
             type={documents[indexDocument].type || ""}
           />
         )}
@@ -317,6 +319,8 @@ export const Dashboard = () => {
             referencias={
               (documents[indexDocument] as BookDocument).referencias || []
             }
+            id={(documents[indexDocument] as BookDocument).id || ""}
+
             resumo={(documents[indexDocument] as BookDocument).resumo || ""}
             capitulos={
               (documents[indexDocument] as BookDocument).capitulos || []
@@ -350,6 +354,8 @@ export const Dashboard = () => {
               (documents[indexDocument] as ArticleDocument).referencias || []
             }
             resumo={(documents[indexDocument] as ArticleDocument).resumo || ""}
+            id={(documents[indexDocument] as ArticleDocument).id || ""}
+
             type={(documents[indexDocument] as ArticleDocument).type || ""}
           />
         )}
@@ -461,6 +467,9 @@ export const Dashboard = () => {
             }
             resumo={
               (documents[indexDocument] as LegislationDocument).resumo || ""
+            }
+            id={
+              (documents[indexDocument] as LegislationDocument).id || ""
             }
             type={(documents[indexDocument] as LegislationDocument).type || ""}
           />

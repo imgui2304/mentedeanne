@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Formik, Field, Form } from "formik";
 import axios from "axios";
+import Sucess from "../../SucessMsg";
 
 export const CreateLegislation = () => {
-  const [documentCreated, setDocumentCreated] = useState(false);
+  const [documentCreated, setDocumentCreated] = useState<number>(0);
   const [resumo, setResumo] = useState("");
   const [palavrasChave, setPalavrasChave] = useState<string[]>([]);
   const [newPalavraChave, setNewPalavraChave] = useState("");
@@ -23,17 +24,21 @@ export const CreateLegislation = () => {
       palavrasChave,
     };
     console.log(payload);
-    const response = await axios.post(
-      "https://mentedeanne-production.up.railway.app/create-book",
-      payload
-    );
-
-    if (response.status === 201) {
-      setDocumentCreated(true);
-      setTimeout(() => {
-        setDocumentCreated(false);
-      }, 3000);
+    try {
+      await axios.post(
+        "https://mentedeanne-production.up.railway.app/create-book",
+        payload
+      );
+     
+        setDocumentCreated(1);
+        setTimeout(() => setDocumentCreated(0), 3000);
+      
+    } catch (error) {
+      setDocumentCreated(2);
+      setTimeout(() => setDocumentCreated(0), 3000);
     }
+   
+
   };
 
   return (
@@ -45,7 +50,7 @@ export const CreateLegislation = () => {
       <Formik
         initialValues={{
           title: "",
-          classification: "" ,
+          classification: "",
           specification: "",
           purpose: "",
           organ: "",
@@ -86,7 +91,6 @@ export const CreateLegislation = () => {
                 placeholder="Digite o Título"
                 className="p-2 rounded-[5px] bg-custom-black text-text-dark"
                 required
-
               />
               {/* Especificação */}
 
@@ -94,24 +98,21 @@ export const CreateLegislation = () => {
                 name="specification"
                 placeholder="Especificação da Numeração e Data da Aprovação"
                 className="p-3 rounded-[5px] bg-custom-black text-text-dark"
-              required
-
+                required
               />
               {/* Finalidade */}
               <Field
                 name="purpose"
                 placeholder="Finalidade"
                 className="p-3 rounded-[5px] bg-custom-black text-text-dark"
-              required
-
+                required
               />
               {/* Orgão */}
               <Field
                 name="organ"
                 placeholder="Órgão"
                 className="p-3 rounded-[5px] bg-custom-black text-text-dark"
-              required
-
+                required
               />
               {/* Ano */}
               <Field
@@ -147,7 +148,6 @@ export const CreateLegislation = () => {
                   onChange={(e) => setNewPalavraChave(e.target.value)}
                   placeholder="Digite uma palavra-chave"
                   className="p-2 border border-custom-gray rounded"
-
                 />
                 <button
                   type="button"
@@ -173,12 +173,7 @@ export const CreateLegislation = () => {
                 Criar Documento
               </button>
             </div>
-
-            {documentCreated && (
-              <div className="mt-4 p-3 bg-green-500 text-white rounded">
-                Documento criado com sucesso!
-              </div>
-            )}
+              <Sucess sucess={documentCreated} />
           </Form>
         )}
       </Formik>

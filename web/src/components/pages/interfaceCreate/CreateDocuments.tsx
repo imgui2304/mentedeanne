@@ -2,9 +2,10 @@ import { useState } from "react";
 import { Formik, Field, Form } from "formik";
 // import axios from "axios";
 import axios from "axios";
+import Sucess from "../../SucessMsg";
 
 export const CreateDocuments = () => {
-  const [documentCreated, setDocumentCreated] = useState(false);
+  const [documentCreated, setDocumentCreated] = useState<number>(0);
   const [resumo, setResumo] = useState("");
   const [palavrasChave, setPalavrasChave] = useState<string[]>([]);
   const [referencias, setReferencias] = useState<string[]>([]);
@@ -37,15 +38,17 @@ const createDocument = async (values: any) => {
   };
   
   try {
-    const response = await axios.post("https://mentedeanne-production.up.railway.app/create-book", payload);
-    if (response.status === 201) {
-      setDocumentCreated(true);
-      setTimeout(() => {
-        setDocumentCreated(false);
-      }, 3000);
-    }
+    await axios.post(
+      "https://mentedeanne-production.up.railway.app/create-book",
+      payload
+    );
+   
+      setDocumentCreated(1);
+      setTimeout(() => setDocumentCreated(0), 3000);
+    
   } catch (error) {
-    console.error("Erro ao criar o documento:", error);
+    setDocumentCreated(2);
+    setTimeout(() => setDocumentCreated(0), 3000);
   }
 };
 
@@ -114,7 +117,7 @@ const createDocument = async (values: any) => {
             <div className="mt-4 flex gap-4 p-2">
               <button type="submit" className="p-3 rounded w-[200px] h-[50px] bg-custom-purple text-white">Criar Documento</button>
             </div>
-            {documentCreated && <div className="mt-4 p-3 bg-green-500 text-white rounded">Documento criado com sucesso!</div>}
+            <Sucess sucess={documentCreated} />
           </Form>
         )}
       </Formik>
