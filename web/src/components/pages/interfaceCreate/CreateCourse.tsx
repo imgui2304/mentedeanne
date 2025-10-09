@@ -2,6 +2,12 @@ import { useState } from "react";
 import { Formik, Field, Form } from "formik";
 import axios from "axios";
 import Sucess from "../../SucessMsg";
+import {
+  addReferencia,
+  removePalavraChave,
+  removeReferencia,
+} from "../../../functions/addReferencia";
+import { addPalavraChave } from "../../../functions/addPalavraChave";
 
 export const CreateCourse = () => {
   const [documentCreated, setDocumentCreated] = useState<number>(0);
@@ -11,38 +17,37 @@ export const CreateCourse = () => {
   const [newPalavraChave, setNewPalavraChave] = useState("");
   const [newReferencia, setNewReferencia] = useState("");
 
-  const addPalavraChave = () => {
-    if (newPalavraChave.trim() && palavrasChave.length < 5) {
-      setPalavrasChave([...palavrasChave, newPalavraChave.trim()]);
-      setNewPalavraChave(""); // Limpa o campo de entrada após adicionar
-    }
-  };
+  // const addPalavraChave = () => {
+  //   if (newPalavraChave.trim() && palavrasChave.length < 5) {
+  //     setPalavrasChave([...palavrasChave, newPalavraChave.trim()]);
+  //     setNewPalavraChave(""); // Limpa o campo de entrada após adicionar
+  //   }
+  // };
 
-  const addReferencia = () => {
-    if (newReferencia.trim()) {
-      setReferencias([...referencias, newReferencia.trim()]);
-      setNewReferencia(""); // Limpa o campo de entrada após adicionar
-    }
-  };
+  // const addReferencia = () => {
+  //   if (newReferencia.trim()) {
+  //     setReferencias([...referencias, newReferencia.trim()]);
+  //     setNewReferencia(""); // Limpa o campo de entrada após adicionar
+  //   }
+  // };
 
   const createDocument = async (values: any) => {
     const payload = {
       type: "curso",
-      formData: {...values},
+      formData: { ...values },
       resumo,
       palavrasChave,
       referencias,
     };
-    console.log(payload)
+    console.log(payload);
     try {
       await axios.post(
         "https://mentedeanne-production.up.railway.app/create-book",
         payload
       );
-     
-        setDocumentCreated(1);
-        setTimeout(() => setDocumentCreated(0), 3000);
-      
+
+      setDocumentCreated(1);
+      setTimeout(() => setDocumentCreated(0), 3000);
     } catch (error) {
       setDocumentCreated(2);
       setTimeout(() => setDocumentCreated(0), 3000);
@@ -51,7 +56,9 @@ export const CreateCourse = () => {
 
   return (
     <div className="bg-custom-black p-5 rounded-lg w-full">
-      <h1 className="text-text-dark text-4xl font-bold mb-4">Cadastrar Curso</h1>
+      <h1 className="text-text-dark text-4xl font-bold mb-4">
+        Cadastrar Curso
+      </h1>
 
       <Formik
         initialValues={{
@@ -66,7 +73,9 @@ export const CreateCourse = () => {
       >
         {() => (
           <Form className="flex-col gap-4 flex text-text-dark">
-            <h2 className="text-text-dark text-xl font-bold mb-4">Informações do Curso</h2>
+            <h2 className="text-text-dark text-xl font-bold mb-4">
+              Informações do Curso
+            </h2>
             <div className="grid grid-cols-2 gap-4 w-full h-full">
               <Field
                 name="title"
@@ -101,7 +110,7 @@ export const CreateCourse = () => {
               name="documentSummary"
               placeholder="Resumo do Curso (máximo de 4 páginas)"
               onChange={(e) => setResumo(e.target.value)}
-            //   value={values.resumo}
+              //   value={values.resumo}
               className="p-3 rounded-[5px] bg-custom-black text-text-dark"
             />
 
@@ -118,15 +127,33 @@ export const CreateCourse = () => {
                 />
                 <button
                   type="button"
-                  onClick={addPalavraChave}
+                  onClick={() =>
+                    setPalavrasChave(
+                      addPalavraChave(newPalavraChave, palavrasChave)
+                    )
+                  }
                   className="p-2 bg-blue-500 text-white rounded"
                 >
                   Adicionar
                 </button>
               </div>
-              <ul className="mt-2">
+              <ul>
                 {palavrasChave.map((palavra, index) => (
-                  <li key={index}>{palavra}</li>
+                  <li key={index} className="flex gap-2 mt-4">
+                    {palavra}
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setPalavrasChave(
+                          removePalavraChave(index, palavrasChave)
+                        )
+                      }
+                    >
+                      <a className="p-1 text-ml bg-red-400 text-white rounded">
+                        Remover
+                      </a>
+                    </button>
+                  </li>
                 ))}
               </ul>
             </section>
@@ -146,15 +173,29 @@ export const CreateCourse = () => {
                 />
                 <button
                   type="button"
-                  onClick={addReferencia}
+                  onClick={() =>
+                    setReferencias(addReferencia(newReferencia, referencias))
+                  }
                   className="p-2 bg-blue-500 text-white rounded"
                 >
                   Adicionar
                 </button>
               </div>
-              <ul className="mt-2">
+              <ul>
                 {referencias.map((ref, index) => (
-                  <li key={index}>{ref}</li>
+                  <li key={index} className="flex gap-2 mt-4">
+                    {ref}
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setReferencias(removeReferencia(index, referencias))
+                      }
+                    >
+                      <a className="p-1 text-ml bg-red-400 text-white rounded">
+                        Remover
+                      </a>
+                    </button>
+                  </li>
                 ))}
               </ul>
             </section>
@@ -170,7 +211,6 @@ export const CreateCourse = () => {
             </div>
 
             <Sucess sucess={documentCreated} />
-
           </Form>
         )}
       </Formik>
