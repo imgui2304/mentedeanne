@@ -1,7 +1,8 @@
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import jwt from "@fastify/jwt";
-import { PrismaClient } from "@prisma/client";
+import pkg from "@prisma/client";
+const { PrismaClient } = pkg;
 const prisma = new PrismaClient();
 
 // Extend FastifyInstance to include the 'auth' property
