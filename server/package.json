@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "postinstall": "npx prisma generate --binary-targets native",
     "start": "node dist/server.js",
     "build": "tsc",
     "dev": "tsx watch ./src/server.ts"
