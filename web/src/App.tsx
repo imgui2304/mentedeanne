@@ -1,7 +1,8 @@
 import { useEffect } from "react";
-import "./App.css";
-import Login from "./pages/Login";
+import "./index.css";
+
 import { useNavigate } from "react-router-dom";
+import LoginPage from "./features/auth/pages/LoginPage";
 
 function App() {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ function App() {
   }, [navigate]);
 
   return (
-  <Login />
+  <LoginPage />
   );
 }
 

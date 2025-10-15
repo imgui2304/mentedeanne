@@ -2,7 +2,10 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
-import { Dashboard } from './pages/Dashboard.tsx';
+import { Dashboard } from './features/dashboard/Dashboard.tsx';
+import { CreatePage } from './features/editor/pages/Create/CreatePage.tsx';
+import { InterfacePage } from './features/editor/pages/Interface/InterfacePage.tsx';
+// import { Dashboard } from './pages/Dashboard.tsx';
 
 const isAuthenticated = () => {
   return !!localStorage.getItem("token"); // Verifica se há um token no localStorage
@@ -28,6 +31,14 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: <PrivateRoute><Dashboard /></PrivateRoute>,
+  },
+  {
+    path: "/create/:type",
+    element: <PrivateRoute><CreatePage /></PrivateRoute>,
+  },
+   {
+    path: "/documentos/:id",
+    element: <PrivateRoute><InterfacePage /></PrivateRoute>,
   },
 ]);
 createRoot(document.getElementById('root')!).render(
