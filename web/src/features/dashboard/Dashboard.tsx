@@ -17,6 +17,7 @@ export function Dashboard() {
 useEffect(() => {
   axios.get(`${apiUrl}/documents`).then((response) => {
     setDocuments(response.data);
+    console.log(`${apiUrl}/documents`)
     setFilteredDocuments(response.data);
   });
 }, []);
