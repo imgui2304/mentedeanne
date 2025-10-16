@@ -115,25 +115,6 @@ fastify.put("/document-change/:id", async (request, reply) => {
   }
 });
 
-//   fastify.post("/create", async (request, reply) => {
-//     console.log("Attempting to create user...");
-
-//     try {
-//         const user = await prisma.user.create({
-//             data: {
-//                 login: "admin",
-//                 password: "admin"
-//             }
-//         });
-
-//         console.log("User created:", user);
-//         return reply.status(201).send(user);
-
-//     } catch (error) {
-//         console.error("Error creating user:", error);
-//         return reply.status(500).send({ error: "Error creating user." });
-//     }
-// });
 fastify.post("/login", async (request, reply) => {
   const { email, pass } = request.body as { email: string; pass: string };
 
