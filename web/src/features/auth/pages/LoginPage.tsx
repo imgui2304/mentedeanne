@@ -59,7 +59,7 @@ function LoginPage() {
           </div>
           <button
             onClick={handleLogin}
-            className="p-3 w-[300px] rounded-[5px] h-[50px] bg-purple-500 text-white text-center font-bold "
+            className="p-3 w-[300px] rounded-[5px] h-[50px] bg-purple-500 text-white text-center font-bold hover:cursor-pointer hover:bg-purple-600 transition"
           >
             Entrar
           </button>

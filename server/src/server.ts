@@ -14,7 +14,7 @@ declare module "fastify" {
 
 const fastify = Fastify({ logger: true });
 fastify.register(cors, {
-  origin: ['http://localhost:5173', 'https://mentedeanne.onrender.com'], // ou '*' para qualquer origem
+  origin: "https://mentedeanne-2.onrender.com", // ou '*' para qualquer origem
   methods: ['GET', 'POST', 'PUT', 'DELETE']
 });
 
