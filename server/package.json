@@ -15,7 +15,7 @@
   "dependencies": {
     "@fastify/cors": "^10.0.2",
     "@fastify/jwt": "^9.0.4",
-    "@prisma/client": "6.4.0",
+    "@prisma/client": "6.17.1",
     "fastify": "^5.2.1",
     "firebase": "^11.3.1",
     "tsx": "^3.12.7"
@@ -24,7 +24,7 @@
     "@types/cors": "^2.8.13",
     "i": "^0.3.7",
     "npm": "^9.6.7",
-    "prisma": "^6.4.0",
+    "prisma": "6.17.1",
     "typescript": "^5.8.3"
   }
 }
