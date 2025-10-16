@@ -1,71 +1,34 @@
 // server.ts
-import Fastify, { FastifyRequest, FastifyReply } from "fastify";
+import Fastify from "fastify";
 import cors from "@fastify/cors";
-import jwt from "@fastify/jwt";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 const fastify = Fastify({ logger: true });
 
 // ------------------------
-// 1️⃣ Variáveis de ambiente
-// ------------------------
-const JWT_SECRET = process.env.JWT_SECRET || "meuSegredoSuperForte";
-
-// ------------------------
-// 2️⃣ Plugins
+// Plugins
 // ------------------------
 fastify.register(cors, {
-  origin: ["https://mentedeanne-2.onrender.com"], // seu frontend
+  origin: ["https://mentedeanne-2.onrender.com"], // frontend
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE"],
 });
 
-fastify.register(jwt, {
-  secret: JWT_SECRET,
-  sign: { expiresIn: "1h" },
-});
-
 // ------------------------
-// 3️⃣ Middleware auth
+// Rotas
 // ------------------------
-fastify.decorate(
-  "auth",
-  async (request: FastifyRequest, reply: FastifyReply) => {
-    try {
-      await request.jwtVerify();
-    } catch (error) {
-      return reply.status(401).send({ error: "Token inválido ou não fornecido" });
-    }
-  }
-);
-
-// ------------------------
-// 4️⃣ Credenciais fixas
-// ------------------------
-const loginAccount = { email: "admin", pass: "admin" };
-
-// ------------------------
-// 5️⃣ Rotas
-// ------------------------
-
-// Healthcheck
 fastify.get("/", async () => ({ message: "Servidor ativo e rodando!" }));
 
-// Login
+// Login simples (sem JWT)
+const loginAccount = { email: "admin", pass: "admin" };
 fastify.post("/login", async (request, reply) => {
   const { email, pass } = request.body as { email: string; pass: string };
-
   if (email === loginAccount.email && pass === loginAccount.pass) {
-    const token = fastify.jwt.sign({ email });
-    return reply.send({ token });
+    return reply.send({ message: "Login bem-sucedido" });
   }
-
   return reply.status(401).send({ error: "E-mail ou senha inválidos!" });
 });
-
-// Exemplo de rota protegida
-
 
 // CRUD de documentos
 fastify.get("/documents", async () => prisma.document.findMany());
@@ -111,15 +74,12 @@ fastify.delete("/document-delete/:id", async (request, reply) => {
 });
 
 // ------------------------
-// 6️⃣ Start do servidor
+// Start do servidor
 // ------------------------
 const start = async () => {
   try {
-    await prisma.$connect(); // conecta ao banco antes de subir
-    await fastify.listen({
-      port: Number(process.env.PORT) || 3000,
-      host: "0.0.0.0",
-    });
+    await prisma.$connect();
+    await fastify.listen({ port: Number(process.env.PORT) || 3000, host: "0.0.0.0" });
     console.log("Servidor rodando!");
   } catch (err) {
     fastify.log.error(err);
