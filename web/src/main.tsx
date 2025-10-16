@@ -17,16 +17,8 @@ const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
 };
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <App />,
-  },
-  {
-    path: "/",
-    element: <PrivateRoute><Dashboard /></PrivateRoute>,
-  },
-  {
     path: "/login",
-    element: <App />,
+    element: <App />, // App só mostra LoginPage
   },
   {
     path: "/dashboard",
@@ -36,9 +28,13 @@ const router = createBrowserRouter([
     path: "/create/:type",
     element: <PrivateRoute><CreatePage /></PrivateRoute>,
   },
-   {
+  {
     path: "/documentos/:id",
     element: <PrivateRoute><InterfacePage /></PrivateRoute>,
+  },
+  {
+    path: "/",
+    element: <PrivateRoute><Dashboard /></PrivateRoute>, // raiz redireciona para dashboard se logado
   },
 ]);
 createRoot(document.getElementById('root')!).render(
