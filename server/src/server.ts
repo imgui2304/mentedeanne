@@ -9,10 +9,10 @@ const fastify = Fastify({ logger: true });
 // ------------------------
 // Plugins
 // ------------------------
-fastify.register(cors, {
-  origin: ["https://mentedeanne-2.onrender.com"], // frontend
+fastify.register(require("@fastify/cors"), {
+  origin: ["https://mentedeanne-2.onrender.com"], // front
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 });
 
 // ------------------------
