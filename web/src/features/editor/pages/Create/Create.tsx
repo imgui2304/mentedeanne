@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import type { DocumentType } from "../../../types/types";
 import { documentFieldMap } from "../../../types/documentFieldMap";
-import { API_URL } from "../../../documents/types/api";
 
 interface Props {
   type: DocumentType;
@@ -15,6 +14,8 @@ export function BookCreateForm({ type }: Props) {
   const [palavrasChave, setPalavrasChave] = useState<string[]>([]);
   const [referencias, setReferencias] = useState<string[]>([]);
   const [capitulos, setCapitulos] = useState<{ id: number; resumo: string }[]>([]);
+
+    const apiUrl = import.meta.env.VITE_API_URL;
 
   const [savingStatus, setSavingStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
 
@@ -39,7 +40,7 @@ export function BookCreateForm({ type }: Props) {
         capitulos,
       };
 
-      await axios.post(`${API_URL}/documents`, payload);
+      await axios.post(`${apiUrl}/documents`, payload);
       setSavingStatus("saved");
 
       // Após 2s volta para "idle"

@@ -2,30 +2,17 @@ import axios from "axios";
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { API_URL } from "../../documents/types/api";
 
 
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const navigate = useNavigate();
-
-  // const handleCreate = async (e: any) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await axios.post("http://mentedeanne-production.up.railway.app/create", {
-  //       login: "admin",
-  //       password: "admin",
-  //     });
-  //     console.log(response);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const handleLogin = async (e: any) => {
     e.preventDefault();
-    console.log("as");
+
 
     let loginData = {
       email,
@@ -34,7 +21,7 @@ function LoginPage() {
 
     try {
       const response = await axios.post(
-        `${API_URL}/login`,
+        `${apiUrl}/login`,
         loginData
       );
 

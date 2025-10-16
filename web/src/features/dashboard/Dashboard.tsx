@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { DocumentCard } from "./DocumentCard";
-import { API_URL } from "../documents/types/api";
 import type { Document } from "../types/types";
 import { useNavigate } from "react-router-dom";
-
 export function Dashboard() {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [filteredDocuments, setFilteredDocuments] = useState<Document[]>([]);
@@ -12,11 +10,12 @@ export function Dashboard() {
 
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
+  const apiUrl = import.meta.env.VITE_API_URL;
 
 
   // Busca documentos na API
 useEffect(() => {
-  axios.get(`${API_URL}/documents`).then((response) => {
+  axios.get(`${apiUrl}/documents`).then((response) => {
     setDocuments(response.data);
     setFilteredDocuments(response.data);
   });
