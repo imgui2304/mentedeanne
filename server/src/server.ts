@@ -17,11 +17,7 @@ fastify.register(cors, {
   origin: ['http://localhost:5173', 'https://mentedeanne.onrender.com'], // ou '*' para qualquer origem
   methods: ['GET', 'POST', 'PUT', 'DELETE']
 });
-// Configurar CORS para permitir requisições do frontend
-fastify.register(cors, { origin: "*" });
 
-// Configurar JWT
-fastify.register(jwt, { secret: "sua_chave_secreta" }); // 🔑 Use uma chave forte!
 
 // Credenciais fixas
 const loginAccount = {
