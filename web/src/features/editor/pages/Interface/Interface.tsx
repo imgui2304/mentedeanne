@@ -7,6 +7,7 @@ import {
   AutoResizeTextarea,
   ChapterItem,
 } from "./functions/AutoResizeTextarea";
+import axios from "axios";
 
 interface InterfaceProps {
   document: {
@@ -248,6 +249,33 @@ export function Interface({ document, onUpdate }: InterfaceProps) {
           type="button"
         >
           Exportar PDF
+        </button>
+        <button
+          onClick={async () => {
+            if (
+              !confirm(
+                "Tem certeza que deseja excluir este documento? Esta ação é irreversível."
+              )
+            )
+              return;
+
+            try {
+              await axios.delete(
+                `https://mentedeanne.onrender.com/document-delet/${document.id}`
+              );
+              alert("Documento excluído com sucesso!");
+              // Opcional: atualizar lista de documentos no parent
+              onUpdate(null);
+            } catch (err) {
+              console.error("Erro ao excluir documento:", err);
+              alert("Falha ao excluir documento");
+            }
+          }}
+          className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded shadow transition"
+          title="Excluir documento"
+          type="button"
+        >
+          Excluir
         </button>
       </div>
 

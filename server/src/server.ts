@@ -14,10 +14,10 @@ declare module "fastify" {
 
 const fastify = Fastify({ logger: true });
 fastify.register(cors, {
-  origin: "https://mentedeanne-2.onrender.com", // ou '*' para qualquer origem
+  origin: ['https://mentedeanne-2.onrender.com'], 
+  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE']
 });
-
 
 // Credenciais fixas
 const loginAccount = {
