@@ -25,6 +25,7 @@ interface InterfaceProps {
 
 export function Interface({ document, onUpdate }: InterfaceProps) {
   const fields = documentFieldMap[document.type] || [];
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   // Estados separados para cada parte editável
   const [formData, setFormData] = useState<Record<string, any>>(
@@ -261,7 +262,7 @@ export function Interface({ document, onUpdate }: InterfaceProps) {
 
             try {
               await axios.delete(
-                `https://mentedeanne.onrender.com/document-delet/${document.id}`
+                `${apiUrl}/document-delete/${document.id}`
               );
               alert("Documento excluído com sucesso!");
               // Opcional: atualizar lista de documentos no parent
