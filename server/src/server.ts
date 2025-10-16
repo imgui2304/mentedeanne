@@ -9,12 +9,11 @@ const fastify = Fastify({ logger: true });
 // ------------------------
 // Plugins
 // ------------------------
-fastify.register(require("@fastify/cors"), {
-  origin: ["https://mentedeanne-2.onrender.com"], // front
+fastify.register(cors, {
+  origin: ["https://mentedeanne-2.onrender.com"], // front-end
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 });
-
 // ------------------------
 // Rotas
 // ------------------------
@@ -44,6 +43,8 @@ fastify.post("/documents", async (request, reply) => {
   try {
     const data = request.body as any;
     const doc = await prisma.document.create({ data });
+    console.log("BODY RECEBIDO:", request.body);
+
     return reply.status(201).send(doc);
   } catch (error: any) {
     return reply.status(500).send({ error: error.message });
