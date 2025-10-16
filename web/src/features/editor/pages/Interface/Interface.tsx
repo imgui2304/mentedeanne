@@ -8,6 +8,7 @@ import {
   ChapterItem,
 } from "./functions/AutoResizeTextarea";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 interface InterfaceProps {
   document: {
@@ -26,6 +27,7 @@ interface InterfaceProps {
 export function Interface({ document, onUpdate }: InterfaceProps) {
   const fields = documentFieldMap[document.type] || [];
   const apiUrl = import.meta.env.VITE_API_URL;
+  const navigate = useNavigate(); // React Router hook
 
   // Estados separados para cada parte editável
   const [formData, setFormData] = useState<Record<string, any>>(
@@ -265,6 +267,7 @@ export function Interface({ document, onUpdate }: InterfaceProps) {
                 `${apiUrl}/document-delete/${document.id}`
               );
               alert("Documento excluído com sucesso!");
+              navigate("/dashboard");
               // Opcional: atualizar lista de documentos no parent
               onUpdate(null);
             } catch (err) {
@@ -277,6 +280,15 @@ export function Interface({ document, onUpdate }: InterfaceProps) {
           type="button"
         >
           Excluir
+        </button>
+        <button
+          onClick={async () => {
+            navigate("/dashboard");
+          }}
+          className="text-black px-4 py-2 rounded shadow transition"
+          type="button"
+        >
+          X
         </button>
       </div>
 
