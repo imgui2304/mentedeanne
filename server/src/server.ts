@@ -13,6 +13,8 @@ fastify.register(cors, {
   origin: ["https://mentedeanne-2.onrender.com"], // front-end
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+
 });
 // ------------------------
 // Rotas
@@ -41,7 +43,7 @@ fastify.get("/document/:id", async (request, reply) => {
 
 fastify.post("/documents", async (request, reply) => {
   try {
-    console.log("📥 BODY RECEBIDO:", request.body);
+    console.log("BODY RECEBIDO:", request.body);
 
     const data = request.body as any;
 
