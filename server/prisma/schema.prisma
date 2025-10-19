@@ -23,11 +23,11 @@ model Document {
   id            String  @id @default(uuid())
   type          String?
   formData      Json?
+  author        Json?     // 👈 adicionei aqui
   resumo        String?
   palavrasChave Json?
   referencias   Json?
   capitulos     Json?
-  // status        String  @default("draft")
 }
 
 
