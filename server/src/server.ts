@@ -1,4 +1,4 @@
-// server.ts
+
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import { PrismaClient } from "@prisma/client";
@@ -6,22 +6,22 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 const fastify = Fastify({ logger: true });
 
-// ------------------------
-// Plugins
-// ------------------------
+
+
+
 fastify.register(cors, {
-  origin: ["https://mentedeanne-2.onrender.com/"], // front-end
+  origin: ["https://mentedeanne-2.onrender.com/"],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
 
 });
-// ------------------------
-// Rotas
-// ------------------------
+
+
+
 fastify.get("/", async () => ({ message: "Servidor ativo e rodando!" }));
 
-// Login simples (sem JWT)
+
 const loginAccount = { email: "admin", pass: "admin" };
 fastify.post("/login", async (request, reply) => {
   const { email, pass } = request.body as { email: string; pass: string };
@@ -31,7 +31,7 @@ fastify.post("/login", async (request, reply) => {
   return reply.status(401).send({ error: "E-mail ou senha inválidos!" });
 });
 
-// CRUD de documentos
+
 fastify.get("/documents", async () => prisma.document.findMany());
 
 fastify.get("/document/:id", async (request, reply) => {
@@ -43,7 +43,7 @@ fastify.get("/document/:id", async (request, reply) => {
 
 fastify.post("/documents", async (request, reply) => {
   try {
-    // console.log("BODY RECEBIDO:", request.body);
+    
 
     const data = request.body as any;
 
@@ -86,9 +86,9 @@ fastify.delete("/document-delete/:id", async (request, reply) => {
   }
 });
 
-// ------------------------
-// Start do servidor
-// ------------------------
+
+
+
 const start = async () => {
   try {
     await prisma.$connect();
