@@ -31,7 +31,7 @@ export function InterfacePage() {
     const res = await axios.put(`${apiUrl}/document-change/${id}`, updatedDoc);
     setDocumento(res.data); // <-- usa o documento retornado pelo banco
   } catch (err) {
-    alert("Erro ao salvar documento");
+    // alert("Erro ao salvar documento");
   }
 }
 

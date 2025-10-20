@@ -266,7 +266,7 @@ export function Interface({ document, onUpdate }: InterfaceProps) {
               await axios.delete(
                 `${apiUrl}/document-delete/${document.id}`
               );
-              alert("Documento excluído com sucesso!");
+              // alert("Documento excluído com sucesso!");
               navigate("/dashboard");
               // Opcional: atualizar lista de documentos no parent
               onUpdate(null);

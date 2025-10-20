@@ -10,7 +10,7 @@ const fastify = Fastify({ logger: true });
 // Plugins
 // ------------------------
 fastify.register(cors, {
-  origin: ["https://mentedeanne-2.onrender.com"], // front-end
+  origin: ["http://localhost:5173"], // front-end
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
@@ -43,7 +43,7 @@ fastify.get("/document/:id", async (request, reply) => {
 
 fastify.post("/documents", async (request, reply) => {
   try {
-    console.log("BODY RECEBIDO:", request.body);
+    // console.log("BODY RECEBIDO:", request.body);
 
     const data = request.body as any;
 
@@ -54,7 +54,7 @@ fastify.post("/documents", async (request, reply) => {
 
     const doc = await prisma.document.create({ data });
 
-    console.log("Documento criado com sucesso:", doc);
+    console.log("Documento criado com sucesso:"); 
     return reply.status(201).send(doc);
   } catch (error: any) {
     console.error("Erro interno ao criar documento:", error);
