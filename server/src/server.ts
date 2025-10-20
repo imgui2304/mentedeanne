@@ -10,7 +10,7 @@ const fastify = Fastify({ logger: true });
 // Plugins
 // ------------------------
 fastify.register(cors, {
-  origin: ["http://localhost:5173"], // front-end
+  origin: ["https://mentedeanne-2.onrender.com/"], // front-end
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
