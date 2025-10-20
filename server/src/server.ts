@@ -1,4 +1,3 @@
-
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import { PrismaClient } from "@prisma/client";
@@ -6,21 +5,14 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 const fastify = Fastify({ logger: true });
 
-
-
-
 fastify.register(cors, {
-  origin: ["https://mentedeanne-2.onrender.com/"],
+  origin: ["https://mentedeanne-2.onrender.com"],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
-
 });
 
-
-
 fastify.get("/", async () => ({ message: "Servidor ativo e rodando!" }));
-
 
 const loginAccount = { email: "admin", pass: "admin" };
 fastify.post("/login", async (request, reply) => {
@@ -31,20 +23,18 @@ fastify.post("/login", async (request, reply) => {
   return reply.status(401).send({ error: "E-mail ou senha inválidos!" });
 });
 
-
 fastify.get("/documents", async () => prisma.document.findMany());
 
 fastify.get("/document/:id", async (request, reply) => {
   const { id } = request.params as { id: string };
   const doc = await prisma.document.findUnique({ where: { id } });
-  if (!doc) return reply.status(404).send({ error: "Documento não encontrado" });
+  if (!doc)
+    return reply.status(404).send({ error: "Documento não encontrado" });
   return doc;
 });
 
 fastify.post("/documents", async (request, reply) => {
   try {
-    
-
     const data = request.body as any;
 
     if (!data || typeof data !== "object") {
@@ -54,14 +44,13 @@ fastify.post("/documents", async (request, reply) => {
 
     const doc = await prisma.document.create({ data });
 
-    console.log("Documento criado com sucesso:"); 
+    console.log("Documento criado com sucesso:");
     return reply.status(201).send(doc);
   } catch (error: any) {
     console.error("Erro interno ao criar documento:", error);
     return reply.status(500).send({ error: error.message });
   }
 });
-
 
 fastify.put("/document-change/:id", async (request, reply) => {
   const { id } = request.params as { id: string };
@@ -86,13 +75,13 @@ fastify.delete("/document-delete/:id", async (request, reply) => {
   }
 });
 
-
-
-
 const start = async () => {
   try {
     await prisma.$connect();
-    await fastify.listen({ port: Number(process.env.PORT) || 3000, host: "0.0.0.0" });
+    await fastify.listen({
+      port: Number(process.env.PORT) || 3000,
+      host: "0.0.0.0",
+    });
     console.log("Servidor rodando!");
   } catch (err) {
     fastify.log.error(err);
