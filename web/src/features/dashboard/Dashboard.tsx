@@ -87,7 +87,7 @@ useEffect(() => {
         </div>
         <button
           onClick={handleCreateClick}
-          className="bg-blue-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-blue-700 transition"
+          className="bg-blue text-white px-6 py-2 rounded-full font-semibold hover:bg-blue transition"
         >
           Novo Documento
         </button>
@@ -117,7 +117,7 @@ useEffect(() => {
               {documentTypes.map((type) => (
                 <li key={type.value}>
                   <button
-                    className="w-full text-left p-2 hover:bg-gray-200 rounded"
+                    className="w-full text-left p-2 hover:bg-blue  hover:text-white rounded"
                     onClick={() => handleDocumentTypeSelect(type.value)}
                   >
                     {type.label}

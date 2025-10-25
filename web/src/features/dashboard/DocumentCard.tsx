@@ -8,7 +8,7 @@ interface DocumentCardProps {
 export function DocumentCard({ doc, onClick }: DocumentCardProps) {
   return (
     <div
-      className="border-[1px] border-gray-300 p-4 rounded w-64 cursor-pointer hover:border-purple-500 transition"
+      className="border-[1px] border-gray-300 p-4 rounded w-64 cursor-pointer hover:border-blue transition"
       onClick={() => {
         console.log("Clique detectado no card"); // 👈 Teste
         if (onClick) onClick(); 

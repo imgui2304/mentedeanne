@@ -308,7 +308,7 @@ export function Interface({ document, onUpdate }: InterfaceProps) {
                   setFormData((prev) => ({ ...prev, [name]: e.target.value }))
                 }
                 placeholder={`Digite ${label.toLowerCase()}`}
-                className="resize-none border-b border-gray-300 focus:border-purple-500 outline-none text-lg p-1"
+                className="resize-none border-b border-gray-300 focus:border-blue outline-none text-lg p-1"
                 rows={4}
               />
             ) : (
