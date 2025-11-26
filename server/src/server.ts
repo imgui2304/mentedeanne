@@ -18,7 +18,7 @@ const loginAccount = { email: "dematossouza@gmail.com", pass: "Doutora@2021" };
 fastify.post("/login", async (request, reply) => {
   const { email, pass } = request.body as { email: string; pass: string };
   if (email === loginAccount.email && pass === loginAccount.pass) {
-    return reply.send({ message: "Login bem-sucedido"});
+    return reply.send({ message: "Login bem-sucedido", token: crypto.randomUUID() });
   }
   return reply.status(401).send({ error: "E-mail ou senha inválidos!" });
 });
