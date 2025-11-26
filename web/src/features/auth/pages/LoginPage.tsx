@@ -15,7 +15,9 @@ function LoginPage() {
 
     try {
       const response = await axios.post(`${apiUrl}/login`, loginData);
-      localStorage.setItem("token", response.data.token);
+      const token = response.data.token
+      console.log("Login bem-sucedido:", token);
+      localStorage.setItem("token", token);
       navigate("/dashboard");
     } catch (error) {
       console.error("Erro ao fazer login:", error);
