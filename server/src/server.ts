@@ -14,7 +14,7 @@ fastify.register(cors, {
 
 fastify.get("/", async () => ({ message: "Servidor ativo e rodando!" }));
 
-const loginAccount = { email: "admin", pass: "admin" };
+const loginAccount = { email: "dematossouza@gmail.com", pass: "Doutora@2021" };
 fastify.post("/login", async (request, reply) => {
   const { email, pass } = request.body as { email: string; pass: string };
   if (email === loginAccount.email && pass === loginAccount.pass) {
