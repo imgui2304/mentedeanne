@@ -78,13 +78,7 @@ function LoginPage() {
           Entrar
         </button>
 
-        {/* Rodapé do formulário */}
-        <div className="text-center text-sm text-gray-500">
-          Esqueceu a senha?{" "}
-          <a href="#" className="text-blue hover:underline">
-            Recuperar
-          </a>
-        </div>
+      
       </form>
 
       {/* Coruja decorativa lateral */}
