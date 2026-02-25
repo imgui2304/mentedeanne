@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import type { DocumentType } from "../../../types/types";
 import { documentFieldMap } from "../../../types/documentFieldMap";
-import isEqual from "lodash.isequal";
+// import isEqual from "lodash.isequal";
 import jsPDF from "jspdf";
 import {
   AutoResizeTextarea,
@@ -44,13 +44,15 @@ export function Interface({ document, onUpdate }: InterfaceProps) {
   );
   const [resumo, setResumo] = useState(document.resumo || "");
 
-  useEffect(() => {
-    setFormData(document.formData || {});
-    setPalavrasChave(document.palavrasChave || []);
-    setReferencias(document.referencias || []);
-    setCapitulos(document.capitulos || []);
-    setResumo(document.resumo || "");
-  }, [document]);
+useEffect(() => {
+  if (!document?.id) return;
+
+  setFormData(document.formData || {});
+  setPalavrasChave(document.palavrasChave || []);
+  setReferencias(document.referencias || []);
+  setCapitulos(document.capitulos || []);
+  setResumo(document.resumo || "");
+}, [document?.id]);
   // Guardar os originais para comparação (no mount e quando documento muda)
   const originalDataRef = useRef({
     formData: {},
@@ -60,94 +62,41 @@ export function Interface({ document, onUpdate }: InterfaceProps) {
     resumo: "",
   });
 
-  useEffect(() => {
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-
-    debounceRef.current = setTimeout(() => {
-      const original = originalDataRef.current;
-
-      // Converte tudo para JSON rápido — sem comparação profunda
-      const currentString = JSON.stringify({
-        formData,
-        palavrasChave,
-        referencias,
-        capitulos,
-        resumo,
-      });
-      const originalString = JSON.stringify(original);
-
-      // Só atualiza se realmente mudou
-      if (currentString !== originalString) {
-        onUpdate({
-          ...document,
-          formData,
-          palavrasChave,
-          referencias,
-          capitulos,
-          resumo,
-        });
-
-        // Atualiza original
-        originalDataRef.current = {
-          formData,
-          palavrasChave,
-          referencias,
-          capitulos,
-          resumo,
-        };
-      }
-    }, 1000);
-
-    return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-    };
-  }, [formData, palavrasChave, referencias, capitulos, resumo]);
+ 
 
   // Debounce para evitar muitos updates, só atualiza se mudou de verdade
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
-    if (debounceRef.current) clearTimeout(debounceRef.current);
+  if (debounceRef.current) clearTimeout(debounceRef.current);
 
-    debounceRef.current = setTimeout(() => {
-      const original = originalDataRef.current;
-      if (
-        !isEqual(formData, original.formData) ||
-        !isEqual(palavrasChave, original.palavrasChave) ||
-        !isEqual(referencias, original.referencias) ||
-        !isEqual(capitulos, original.capitulos) ||
-        resumo !== original.resumo
-      ) {
-        onUpdate({
-          ...document,
-          formData,
-          palavrasChave,
-          referencias,
-          capitulos,
-          resumo,
-        });
-        // Atualiza original para evitar update infinito
-        originalDataRef.current = {
-          formData,
-          palavrasChave,
-          referencias,
-          capitulos,
-          resumo,
-        };
-      }
-    }, 1000);
+  debounceRef.current = setTimeout(() => {
+    const original = originalDataRef.current;
 
-    return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
+    const current = {
+      formData,
+      palavrasChave,
+      referencias,
+      capitulos,
+      resumo,
     };
-  }, [
-    formData,
-    palavrasChave,
-    referencias,
-    capitulos,
-    resumo,
-    document,
-    onUpdate,
-  ]);
+
+    const currentString = JSON.stringify(current);
+    const originalString = JSON.stringify(original);
+
+    if (currentString !== originalString) {
+      onUpdate({
+        ...document,
+        ...current,
+      });
+
+      originalDataRef.current = current;
+    }
+  }, 1000);
+
+  return () => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+  };
+}, [formData, palavrasChave, referencias, capitulos, resumo]);
 
   // Função para manipular listas editáveis simples
   function handleListChange(
