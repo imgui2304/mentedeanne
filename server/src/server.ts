@@ -5,14 +5,23 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 const fastify = Fastify({ logger: true });
 
-fastify.register(cors, {
-  origin: ["https://mentedeanne-2.onrender.com", "http://localhost:5173"],
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-});
+const start = async () => {
+  try {
+    await fastify.register(cors, {
+      origin: (origin, cb) => {
+        
+        if (!origin || /localhost/.test(origin) || /onrender\.com/.test(origin)) {
+          cb(null, true);
+          return;
+        }
+        cb(new Error("Not allowed by CORS"), false);
+      },
+      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+      allowedHeaders: ["Content-Type", "Authorization"],
+      credentials: true,
+    });
 
-fastify.get("/", async () => ({ message: "Servidor ativo e rodando!" }));
+   fastify.get("/", async () => ({ message: "Servidor ativo e rodando!" }));
 
 const loginAccount = { email: "dematossouza@gmail.com", pass: "Doutora@2021" };
 fastify.post("/login", async (request, reply) => {
@@ -75,14 +84,14 @@ fastify.delete("/document-delete/:id", async (request, reply) => {
   }
 });
 
-const start = async () => {
-  try {
+    // 3. Conectar banco e subir server
     await prisma.$connect();
-    await fastify.listen({
+    const address = await fastify.listen({
       port: Number(process.env.PORT) || 3000,
       host: "0.0.0.0",
     });
-    console.log("Servidor rodando!");
+    
+    console.log(`🚀 Servidor rodando em: ${address}`);
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);
@@ -90,3 +99,20 @@ const start = async () => {
 };
 
 start();
+
+
+// const start = async () => {
+//   try {
+//     await prisma.$connect();
+//     await fastify.listen({
+//       port: Number(process.env.PORT) || 3000,
+//       host: "0.0.0.0",
+//     });
+//     console.log("Servidor rodando!");
+//   } catch (err) {
+//     fastify.log.error(err);
+//     process.exit(1);
+//   }
+// };
+
+// start();
