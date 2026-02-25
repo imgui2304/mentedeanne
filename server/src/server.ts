@@ -1,7 +1,7 @@
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import { PrismaClient } from "@prisma/client";
-
+import crypto from "node:crypto";
 const prisma = new PrismaClient();
 const fastify = Fastify({ logger: true });
 

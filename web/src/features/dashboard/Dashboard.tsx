@@ -12,21 +12,17 @@ export function Dashboard() {
   const navigate = useNavigate();
   const apiUrl = import.meta.env.VITE_API_URL;
 
-
   // Busca documentos na API
-useEffect(() => {
-  axios.get(`${apiUrl}/documents`).then((response) => {
-    setDocuments(response.data);
-    console.log(`${apiUrl}/documents`)
-    setFilteredDocuments(response.data);
-  });
-}, []);
-
-
-
+  useEffect(() => {
+    axios.get(`${apiUrl}/documents`).then((response) => {
+      setDocuments(response.data);
+      console.log(`${apiUrl}/documents`);
+      setFilteredDocuments(response.data);
+    });
+  }, []);
 
   // Filtra os documentos conforme busca
-  useEffect(() => {
+ useEffect(() => {
   const lowerSearch = searchTerm.toLowerCase();
 
   const filtered = documents.filter((doc) => {
@@ -35,9 +31,16 @@ useEffect(() => {
       .includes(lowerSearch);
 
     const keywordsMatch = (doc.palavrasChave ?? [])
-      .some((kw) => kw.toLowerCase().includes(lowerSearch));
+      .some((kw) =>
+        kw.toLowerCase().includes(lowerSearch)
+      );
 
-    return titleMatch || keywordsMatch;
+    const referencesMatch = (doc.referencias ?? [])
+      .some((ref) =>
+        ref.toLowerCase().includes(lowerSearch)
+      );
+
+    return titleMatch || keywordsMatch || referencesMatch;
   });
 
   setFilteredDocuments(filtered);
@@ -70,6 +73,19 @@ useEffect(() => {
     setShowModal(false);
   };
 
+  const groupedDocuments = filteredDocuments.reduce(
+    (acc, doc) => {
+      const type = doc.type || "outros";
+
+      if (!acc[type]) {
+        acc[type] = [];
+      }
+
+      acc[type].push(doc);
+      return acc;
+    },
+    {} as Record<string, Document[]>,
+  );
   return (
     <main>
       <div className="w-full h-16 shadow-gray-100 shadow-2xl flex items-center justify-around gap-4">
@@ -95,15 +111,21 @@ useEffect(() => {
 
       <div className="min-h-screen bg-gray-100 px-8 py-6">
         <h1 className="text-2xl font-medium mb-6">Meus Documentos</h1>
-        <div className="flex flex-wrap gap-4">
-          {filteredDocuments.map((doc) => (
-            <DocumentCard
-              key={doc.id}
-              doc={doc}
-              onClick={() => handleOpenDocument(doc.id)}
-            />
-          ))}
-        </div>
+        {Object.entries(groupedDocuments).map(([type, docs]) => (
+          <div key={type} className="mb-10">
+            <h2 className="text-xl font-semibold mb-4 capitalize">{type}</h2>
+
+            <div className="flex flex-wrap gap-4">
+              {docs.map((doc) => (
+                <DocumentCard
+                  key={doc.id}
+                  doc={doc}
+                  onClick={() => handleOpenDocument(doc.id)}
+                />
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Modal para escolher o tipo do documento */}

@@ -13,44 +13,36 @@ export function AutoResizeTextarea({
   className?: string;
 }) {
   const ref = useRef<HTMLTextAreaElement | null>(null);
-  const rafRef = useRef<number | null>(null);
 
-  // Ajusta altura sem forçar muitos layouts — via rAF
-  const adjustHeight = () => {
+  const resize = () => {
     const el = ref.current;
     if (!el) return;
+
     el.style.height = "auto";
-    // lê scrollHeight só após reset (força relayout mínimo)
-    const h = el.scrollHeight;
-    el.style.height = `${h}px`;
+    el.style.height = el.scrollHeight + "px";
   };
 
-  // Ajusta sempre que value muda, mas usando requestAnimationFrame
+  // 🔥 Ajusta ao montar e quando value muda externamente
   useLayoutEffect(() => {
-    if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    rafRef.current = requestAnimationFrame(() => {
-      adjustHeight();
-    });
-    return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
+    resize();
   }, [value]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    resize(); // 🔥 Ajusta antes de atualizar estado
+    onChange(e);
+  };
 
   return (
     <textarea
       ref={ref}
       value={value}
-      onChange={onChange}
+      onChange={handleChange}
       placeholder={placeholder}
       rows={1}
-      className={`resize-none overflow-hidden bg-transparent focus:ring-0 outline-none w-full break-words leading-relaxed ${
+      className={`resize-none overflow-hidden bg-transparent focus:ring-0 outline-none w-full leading-relaxed ${
         className ?? ""
       }`}
-      style={{
-        minHeight: "32px",
-        whiteSpace: "pre-wrap",
-        wordWrap: "break-word",
-      }}
+      style={{ minHeight: "32px" }}
     />
   );
 }

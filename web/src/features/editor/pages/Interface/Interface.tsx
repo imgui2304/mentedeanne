@@ -43,6 +43,7 @@ export function Interface({ document, onUpdate }: InterfaceProps) {
     document.capitulos || []
   );
   const [resumo, setResumo] = useState(document.resumo || "");
+  const isFirstLoadRef = useRef(true);
 
 useEffect(() => {
   if (!document?.id) return;
@@ -51,8 +52,10 @@ useEffect(() => {
   setPalavrasChave(document.palavrasChave || []);
   setReferencias(document.referencias || []);
   setCapitulos(document.capitulos || []);
-  setResumo(document.resumo || "");
-}, [document?.id]);
+  if (isFirstLoadRef.current) {
+    setResumo(document.resumo || "");
+    isFirstLoadRef.current = false;
+  }}, [document?.id]);
   // Guardar os originais para comparação (no mount e quando documento muda)
   const originalDataRef = useRef({
     formData: {},
