@@ -7,44 +7,55 @@ export function Dashboard() {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [filteredDocuments, setFilteredDocuments] = useState<Document[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const apiUrl = import.meta.env.VITE_API_URL;
 
   // Busca documentos na API
   useEffect(() => {
-    axios.get(`${apiUrl}/documents`).then((response) => {
-      setDocuments(response.data);
-      console.log(`${apiUrl}/documents`);
-      setFilteredDocuments(response.data);
-    });
+    const fetchDocuments = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const response = await axios.get(`${apiUrl}/documents`);
+
+        setDocuments(response.data);
+        setFilteredDocuments(response.data);
+      } catch (err) {
+        setError("Servidor indisponível no momento.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDocuments();
   }, []);
 
   // Filtra os documentos conforme busca
- useEffect(() => {
-  const lowerSearch = searchTerm.toLowerCase();
+  useEffect(() => {
+    const lowerSearch = searchTerm.toLowerCase();
 
-  const filtered = documents.filter((doc) => {
-    const titleMatch = (doc.formData?.title ?? "")
-      .toLowerCase()
-      .includes(lowerSearch);
+    const filtered = documents.filter((doc) => {
+      const titleMatch = (doc.formData?.title ?? "")
+        .toLowerCase()
+        .includes(lowerSearch);
 
-    const keywordsMatch = (doc.palavrasChave ?? [])
-      .some((kw) =>
-        kw.toLowerCase().includes(lowerSearch)
+      const keywordsMatch = (doc.palavrasChave ?? []).some((kw) =>
+        kw.toLowerCase().includes(lowerSearch),
       );
 
-    const referencesMatch = (doc.referencias ?? [])
-      .some((ref) =>
-        ref.toLowerCase().includes(lowerSearch)
+      const referencesMatch = (doc.referencias ?? []).some((ref) =>
+        ref.toLowerCase().includes(lowerSearch),
       );
 
-    return titleMatch || keywordsMatch || referencesMatch;
-  });
+      return titleMatch || keywordsMatch || referencesMatch;
+    });
 
-  setFilteredDocuments(filtered);
-}, [searchTerm, documents]);
+    setFilteredDocuments(filtered);
+  }, [searchTerm, documents]);
 
   // Tipos para criar documento (mesmo que no modal)
   const documentTypes = [
@@ -80,12 +91,42 @@ export function Dashboard() {
       if (!acc[type]) {
         acc[type] = [];
       }
+      // console.log(type)
 
       acc[type].push(doc);
       return acc;
     },
     {} as Record<string, Document[]>,
   );
+
+// Tela de carregamento, enquanto o servidor carrega
+if (loading) {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="flex flex-col items-center gap-4">
+        <div className="w-12 h-12 border-4 border-blue border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-gray-600">Carregando documentos...</p>
+      </div>
+    </div>
+  );
+}
+
+if (error) {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="text-center">
+        <p className="text-red-500 text-lg mb-4">{error}</p>
+        <button
+          onClick={() => window.location.reload()}
+          className="bg-blue text-white px-4 py-2 rounded"
+        >
+          Tentar novamente
+        </button>
+      </div>
+    </div>
+  );
+}
+
   return (
     <main>
       <div className="w-full h-16 shadow-gray-100 shadow-2xl flex items-center justify-around gap-4">

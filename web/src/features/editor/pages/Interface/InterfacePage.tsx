@@ -36,7 +36,17 @@ export function InterfacePage() {
 }
 
 
-  if (loading) return <div>Carregando...</div>;
+
+  if (loading) {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="flex flex-col items-center gap-4">
+        <div className="w-12 h-12 border-4 border-blue border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-gray-600">Carregando documento...</p>
+      </div>
+    </div>
+  );
+}
   if (error) return <div>{error}</div>;
   if (!documento) return <div>Documento não encontrado</div>;
 
