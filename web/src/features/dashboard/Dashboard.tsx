@@ -99,33 +99,33 @@ export function Dashboard() {
     {} as Record<string, Document[]>,
   );
 
-// Tela de carregamento, enquanto o servidor carrega
-if (loading) {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="flex flex-col items-center gap-4">
-        <div className="w-12 h-12 border-4 border-blue border-t-transparent rounded-full animate-spin"></div>
-        <p className="text-gray-600">Carregando documentos...</p>
+  // Tela de carregamento, enquanto o servidor carrega
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-blue border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-gray-600">Carregando documentos...</p>
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
-if (error) {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <p className="text-red-500 text-lg mb-4">{error}</p>
-        <button
-          onClick={() => window.location.reload()}
-          className="bg-blue text-white px-4 py-2 rounded"
-        >
-          Tentar novamente
-        </button>
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="text-center">
+          <p className="text-red-500 text-lg mb-4">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="bg-blue text-white px-4 py-2 rounded"
+          >
+            Tentar novamente
+          </button>
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
   return (
     <main>
