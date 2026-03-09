@@ -33,7 +33,7 @@ export function Interface({ document, onUpdate }: InterfaceProps) {
   const [formData, setFormData] = useState<Record<string, any>>(
     document.formData || {},
   );
-  const [justify, setJustify] = useState(false);
+  const [justify, setJustify] = useState(true);
   const [palavrasChave, setPalavrasChave] = useState<string[]>(
     document.palavrasChave || [],
   );

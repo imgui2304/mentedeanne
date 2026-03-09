@@ -3,6 +3,7 @@ import axios from "axios";
 import type { DocumentType } from "../../../types/types";
 import { documentFieldMap } from "../../../types/documentFieldMap";
 import { useNavigate } from "react-router-dom";
+import { AutoResizeTextarea } from "../Interface/functions/AutoResizeTextarea";
 
 interface Props {
   type: DocumentType;
@@ -21,7 +22,9 @@ export function BookCreateForm({ type }: Props) {
     capitulos: [] as { id: number; resumo: string }[],
   });
 
-  const [savingStatus, setSavingStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  const [savingStatus, setSavingStatus] = useState<
+    "idle" | "saving" | "saved" | "error"
+  >("idle");
 
   // ID do documento criado
   const [documentId, setDocumentId] = useState<string | null>(null);
@@ -65,14 +68,21 @@ export function BookCreateForm({ type }: Props) {
   // Função genérica para atualizar campo simples
   const handleChange = (name: string, value: string) => {
     setForm((prev) => {
-      const newForm = { ...prev, formData: { ...prev.formData, [name]: value } };
+      const newForm = {
+        ...prev,
+        formData: { ...prev.formData, [name]: value },
+      };
       triggerDebounce(newForm);
       return newForm;
     });
   };
 
   // Função para atualizar arrays (palavrasChave e referencias)
-  const updateArrayField = (fieldName: "palavrasChave" | "referencias", index: number, value: string) => {
+  const updateArrayField = (
+    fieldName: "palavrasChave" | "referencias",
+    index: number,
+    value: string,
+  ) => {
     setForm((prev) => {
       const arr = [...prev[fieldName]];
       arr[index] = value;
@@ -90,7 +100,10 @@ export function BookCreateForm({ type }: Props) {
     });
   };
 
-  const removeArrayField = (fieldName: "palavrasChave" | "referencias", index: number) => {
+  const removeArrayField = (
+    fieldName: "palavrasChave" | "referencias",
+    index: number,
+  ) => {
     setForm((prev) => {
       const arr = prev[fieldName].filter((_, i) => i !== index);
       const newForm = { ...prev, [fieldName]: arr };
@@ -114,7 +127,12 @@ export function BookCreateForm({ type }: Props) {
     setForm((prev) => {
       const newCapitulos = [
         ...prev.capitulos,
-        { id: prev.capitulos.length ? prev.capitulos[prev.capitulos.length - 1].id + 1 : 1, resumo: "" },
+        {
+          id: prev.capitulos.length
+            ? prev.capitulos[prev.capitulos.length - 1].id + 1
+            : 1,
+          resumo: "",
+        },
       ];
       const newForm = { ...prev, capitulos: newCapitulos };
       triggerDebounce(newForm);
@@ -138,119 +156,188 @@ export function BookCreateForm({ type }: Props) {
   };
 
   return (
-    <form className="space-y-4 p-4" onSubmit={(e) => e.preventDefault()}>
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-semibold">Novo {type}</h1>
-      <h1 className="text-2xl font-semibold hover:cursor-pointer" onClick={() => navigate("/dashboard")}>X</h1>
-      </div>
-      {fields.map((field) => (
-        <div key={field.name} className="flex flex-col gap-1">
-          <label className="font-medium">{field.label}</label>
-          {field.type === "textarea" ? (
-            <textarea
-              name={field.name}
-              required={field.required}
-              onChange={(e) => handleChange(field.name, e.target.value)}
-              className="p-2 border rounded"
-            />
-          ) : (
-            <input
-              type={field.type}
-              name={field.name}
-              required={field.required}
-              onChange={(e) => handleChange(field.name, e.target.value)}
-              className="p-2 border rounded"
-            />
-          )}
+    <div className="min-h-screen bg-white max-w-4xl mx-auto p-8 font-sans">
+      <form className="space-y-8" onSubmit={(e) => e.preventDefault()}>
+        {/* Header */}
+        <div className="flex items-start mb-6 gap-4">
+          <h1 className="text-3xl font-semibold flex-1">Novo {type}</h1>
+
+          <button
+            type="button"
+            onClick={() => navigate("/dashboard")}
+            className="text-black px-4 py-2 rounded bg-gray-100 transition hover:cursor-pointer hover:bg-gray-200"
+          >
+            X
+          </button>
         </div>
-      ))}
 
-      {/* Palavras-chave */}
-      <div className="flex flex-col gap-1">
-        <label className="font-medium">Palavras-chave</label>
-        {form.palavrasChave.map((item, index) => (
-          <div key={index} className="flex gap-2 items-center">
-            <input
-              type="text"
-              value={item}
-              onChange={(e) => updateArrayField("palavrasChave", index, e.target.value)}
-              className="p-2 border rounded flex-grow"
-            />
-            <button type="button" onClick={() => removeArrayField("palavrasChave", index)} className="text-red-500 font-bold">
-              X
-            </button>
+        {/* Campos principais */}
+        {fields.map((field) => (
+          <div key={field.name} className="flex flex-col">
+            <label className="text-gray-500 text-sm mb-1 select-none">
+              {field.label}
+              {field.required && " *"}
+            </label>
+
+            {field.type === "textarea" ? (
+              <textarea
+                name={field.name}
+                required={field.required}
+                onChange={(e) => handleChange(field.name, e.target.value)}
+                placeholder={`Digite ${field.label.toLowerCase()}`}
+                className="resize-none border-b border-gray-300 focus:border-blue-500 outline-none text-lg p-1"
+                rows={4}
+              />
+            ) : (
+              <input
+                type={field.type}
+                name={field.name}
+                required={field.required}
+                onChange={(e) => handleChange(field.name, e.target.value)}
+                placeholder={`Digite ${field.label.toLowerCase()}`}
+                className="border-b border-gray-300 focus:border-blue-500 outline-none text-lg p-1"
+              />
+            )}
           </div>
         ))}
-        <button type="button" onClick={() => addArrayField("palavrasChave")} className="mt-1 text-blue-600">
-          + Adicionar palavra-chave
-        </button>
-      </div>
 
-      {/* Referências */}
-      <div className="flex flex-col gap-1">
-        <label className="font-medium">Referências</label>
-        {form.referencias.map((item, index) => (
-          <div key={index} className="flex gap-2 items-center">
-            <input
-              type="text"
-              value={item}
-              onChange={(e) => updateArrayField("referencias", index, e.target.value)}
-              className="p-2 border rounded flex-grow"
-            />
-            <button type="button" onClick={() => removeArrayField("referencias", index)} className="text-red-500 font-bold">
-              X
-            </button>
-          </div>
-        ))}
-        <button type="button" onClick={() => addArrayField("referencias")} className="mt-1 text-blue-600">
-          + Adicionar referência
-        </button>
-      </div>
+        {/* Palavras-chave */}
+        <div>
+          <label className="text-gray-500 text-sm mb-1 select-none block">
+            Palavras-chave
+          </label>
 
-      {/* Resumo */}
-      <div className="flex flex-col gap-1">
-        <label className="font-medium">Resumo</label>
-        <textarea
-          value={form.resumo}
-          onChange={(e) => {
-            const newForm = { ...form, resumo: e.target.value };
-            setForm(newForm);
-            triggerDebounce(newForm);
-          }}
-          className="p-2 border rounded"
-        />
-      </div>
-
-      {/* Capítulos */}
-      {type === "livro" && (
-        <div className="flex flex-col gap-1">
-          <label className="font-medium">Capítulos</label>
-          {form.capitulos.map((capitulo) => (
-            <div key={capitulo.id} className="flex gap-2 items-center">
+          {form.palavrasChave.map((item, index) => (
+            <div key={index} className="flex items-center space-x-2 mb-1">
               <input
                 type="text"
-                value={capitulo.resumo}
-                onChange={(e) => updateCapitulo(form.capitulos.findIndex(c => c.id === capitulo.id), e.target.value)}
-                placeholder="Resumo do capítulo"
-                className="p-2 border rounded flex-grow"
+                value={item}
+                onChange={(e) =>
+                  updateArrayField("palavrasChave", index, e.target.value)
+                }
+                placeholder="Palavra-chave"
+                className="flex-grow border-b border-gray-300 focus:border-blue-500 outline-none text-lg p-1"
               />
-              <button type="button" onClick={() => removeCapitulo(capitulo.id)} className="text-red-500 font-bold">
-                X
+              <button
+                type="button"
+                onClick={() => removeArrayField("palavrasChave", index)}
+                className="text-red-500 font-bold px-2 hover:text-red-700 select-none"
+              >
+                &times;
               </button>
             </div>
           ))}
-          <button type="button" onClick={addCapitulo} className="mt-1 text-blue-600">
-            + Adicionar capítulo
+
+          <button
+            type="button"
+            onClick={() => addArrayField("palavrasChave")}
+            className="text-blue-600 hover:underline select-none mt-1"
+          >
+            + Adicionar palavra-chave
           </button>
         </div>
-      )}
 
-      {/* Status do autosave */}
-      <div className="mt-4 text-sm text-gray-500">
-        {savingStatus === "saving" && "Salvando..."}
-        {savingStatus === "saved" && "Salvo com sucesso!"}
-        {savingStatus === "error" && "Erro ao salvar."}
-      </div>
-    </form>
+        {/* Referências */}
+        <div>
+          <label className="text-gray-500 text-sm mb-1 select-none block">
+            Referências
+          </label>
+
+          {form.referencias.map((item, index) => (
+            <div key={index} className="flex items-center space-x-2 mb-1">
+              <input
+                type="text"
+                value={item}
+                onChange={(e) =>
+                  updateArrayField("referencias", index, e.target.value)
+                }
+                placeholder="Referência"
+                className="flex-grow border-b border-gray-300 focus:border-blue-500 outline-none text-lg p-1"
+              />
+              <button
+                type="button"
+                onClick={() => removeArrayField("referencias", index)}
+                className="text-red-500 font-bold px-2 hover:text-red-700 select-none"
+              >
+                &times;
+              </button>
+            </div>
+          ))}
+
+          <button
+            type="button"
+            onClick={() => addArrayField("referencias")}
+            className="text-blue-600 hover:underline select-none mt-1"
+          >
+            + Adicionar referência
+          </button>
+        </div>
+
+      
+        {/* Resumo */}
+        <div className="flex flex-col gap-1">
+          <label className="text-gray-500 text-sm mb-1 select-none block">Resumo</label>
+          <AutoResizeTextarea
+            value={form.resumo}
+            onChange={(e) => {
+              const newForm = { ...form, resumo: e.target.value };
+              setForm(newForm);
+              triggerDebounce(newForm);
+            }}
+            className="resize-none border-b border-gray-300 focus:ring-0 bg-transparent text-lg leading-relaxed"
+          />
+        </div>
+        {/* Capítulos */}
+        {type === "livro" && (
+          <div>
+            <label className="text-gray-500 text-sm mb-1 select-none block">
+              Capítulos
+            </label>
+
+            {form.capitulos.map((capitulo) => (
+              <div
+                key={capitulo.id}
+                className="flex items-center space-x-2 mb-2"
+              >
+                <input
+                  type="text"
+                  value={capitulo.resumo}
+                  onChange={(e) =>
+                    updateCapitulo(
+                      form.capitulos.findIndex((c) => c.id === capitulo.id),
+                      e.target.value,
+                    )
+                  }
+                  placeholder="Resumo do capítulo"
+                  className="flex-grow border-b border-gray-300 focus:border-blue-500 outline-none text-lg p-1"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeCapitulo(capitulo.id)}
+                  className="text-red-500 font-bold px-2 hover:text-red-700 select-none"
+                >
+                  &times;
+                </button>
+              </div>
+            ))}
+
+            <button
+              type="button"
+              onClick={addCapitulo}
+              className="text-blue-600 hover:underline select-none mt-1"
+            >
+              + Adicionar capítulo
+            </button>
+          </div>
+        )}
+
+        {/* Status autosave */}
+        <div className="mt-6 text-sm text-gray-400">
+          {savingStatus === "saving" && "Salvando..."}
+          {savingStatus === "saved" && "Salvo com sucesso!"}
+          {savingStatus === "error" && "Erro ao salvar."}
+        </div>
+      </form>
+    </div>
   );
 }
